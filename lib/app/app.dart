@@ -8,7 +8,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Geo Tagging',
+      title: 'HUT TBIG ke-17',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
