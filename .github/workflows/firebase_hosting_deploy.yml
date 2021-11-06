@@ -20,6 +20,6 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MESSAGE_MAP_B46D3 }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_GEOTAGGING_D8BBE }}"
           channelId: live
-          projectId: message-map-b46d3
+          projectId: geotagging-d8bbe
