@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
           body: BlocConsumer<AppBloc, AppState>(
             listener: (context, state) {
               if (state is AppLoaded) {
-                if (!state.hasPermission && state.bypass) {
+                if (!state.hasPermission) {
                   final screenHeight = MediaQuery.of(context).size.height;
                   final screenWidth = MediaQuery.of(context).size.width;
                   final isDesktop = screenWidth > 950;
@@ -76,9 +76,6 @@ class HomePage extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            state.bypass
-                                ? const SizedBox.shrink()
-                                : const RequestLocation(),
                           ],
                         ),
                       ),
@@ -197,78 +194,6 @@ class MessageContainer extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class RequestLocation extends StatefulWidget {
-  const RequestLocation({Key? key}) : super(key: key);
-
-  @override
-  State<RequestLocation> createState() => _RequestLocationState();
-}
-
-class _RequestLocationState extends State<RequestLocation> {
-  int _requestCount = 0;
-  @override
-  Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: Container(
-        color: Colors.black87,
-        child: Center(
-          child: Container(
-            width: 240,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  offset: Offset(3, 3),
-                  spreadRadius: 5,
-                  blurRadius: 10,
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('Please turn on and allow location permission'),
-                const SizedBox(height: 8.0),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.disabled)) {
-                          return Colors.grey;
-                        }
-                        return const Color(0xff173a90);
-                      }),
-                    ),
-                    onPressed: () {
-                      _requestCount++;
-                      if (_requestCount >= 3) {
-                        BlocProvider.of<AppBloc>(context)
-                            .add(AppBypassPermission());
-                      } else {
-                        BlocProvider.of<AppBloc>(context)
-                            .add(AppCheckLocationPermission());
-                      }
-                    },
-                    child: const Text(
-                      'CHECK PERMISSION',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
