@@ -23,7 +23,42 @@ class HomePage extends StatelessWidget {
       child: ChangeNotifierProvider(
         create: (_) => HomeProvider(),
         child: Scaffold(
-          body: BlocBuilder<AppBloc, AppState>(
+          body: BlocConsumer<AppBloc, AppState>(
+            listener: (context, state) {
+              if (state is AppLoaded) {
+                if (!state.hasPermission && state.bypass) {
+                  final screenHeight = MediaQuery.of(context).size.height;
+                  final screenWidth = MediaQuery.of(context).size.width;
+                  final isDesktop = screenWidth > 950;
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      dismissDirection: DismissDirection.up,
+                      margin: EdgeInsets.fromLTRB(
+                        isDesktop ? 370.0 : 15.0,
+                        5.0,
+                        isDesktop ? 30.0 : 15.0,
+                        isDesktop ? screenHeight - 80 : screenHeight - 80,
+                      ),
+                      duration: const Duration(seconds: 5),
+                      backgroundColor: const Color(0xFFFFD557),
+                      content: const Text(
+                        'Izin akses untuk lokasi tidak diberikan. Anda tetap bisa mengisi harapan namun Pin lokasi anda tidak akan muncul.',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      action: SnackBarAction(
+                        label: 'OK',
+                        textColor: Colors.black,
+                        onPressed: () {},
+                      ),
+                    ),
+                  );
+                }
+              }
+            },
             builder: (context, state) {
               if (state is AppLoaded) {
                 return SingleChildScrollView(
@@ -37,10 +72,11 @@ class HomePage extends StatelessWidget {
                               children: const [
                                 Positioned.fill(child: MainMap()),
                                 MessageContainer(
-                                    animationDuration: _animationDuration),
+                                  animationDuration: _animationDuration,
+                                ),
                               ],
                             ),
-                            state.hasPermission
+                            state.bypass
                                 ? const SizedBox.shrink()
                                 : const RequestLocation(),
                           ],
@@ -215,7 +251,7 @@ class _RequestLocationState extends State<RequestLocation> {
                     ),
                     onPressed: () {
                       _requestCount++;
-                      if (_requestCount > 3) {
+                      if (_requestCount >= 3) {
                         BlocProvider.of<AppBloc>(context)
                             .add(AppBypassPermission());
                       } else {

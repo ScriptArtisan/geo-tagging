@@ -13,11 +13,13 @@ class AppLoaded extends AppState {
   const AppLoaded({
     this.locationData,
     this.hasPermission = false,
+    this.bypass = false,
   });
 
   final LocationData? locationData;
   final bool hasPermission;
+  final bool bypass;
 
   @override
-  List<Object?> get props => [locationData, hasPermission];
+  List<Object?> get props => [locationData, hasPermission, bypass];
 }

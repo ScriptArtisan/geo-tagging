@@ -17,6 +17,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         emit(AppLoaded(
           locationData: locationData,
           hasPermission: true,
+          bypass: true,
         ));
       } catch (e) {
         log('Error get Location Data', error: e);
@@ -36,6 +37,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         emit(AppLoaded(
           locationData: locationData,
           hasPermission: true,
+          bypass: true,
         ));
       } catch (e) {
         log('Error get Location Data', error: e);
@@ -44,7 +46,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
 
     on<AppBypassPermission>((event, emit) async {
-      emit(const AppLoaded(hasPermission: true));
+      emit(
+        const AppLoaded(
+          hasPermission: false,
+          bypass: true,
+        ),
+      );
     });
   }
 }
